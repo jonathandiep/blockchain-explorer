@@ -1,0 +1,87 @@
+import Link from 'next/link'
+import { BigNumber, utils } from 'ethers'
+import { Badge, Container, Heading } from '@chakra-ui/react'
+import axios from 'axios'
+
+import KeyValueProperty from '../../components/KeyValueProperty'
+import Search from '../../components/Search'
+
+interface TransactionProps {
+  tx: {
+    hash: string
+    type: any
+    accessList: any
+    blockHash: string
+    blockNumber: number
+    transactionIndex: number
+    confirmations: number
+    from: string
+    gasPrice: {
+      type: string
+      hex: string
+    }
+    gasLimit: {
+      type: string
+      hex: string
+    }
+    to: string
+    value: {
+      type: string
+      hex: string
+    }
+    nonce: number
+    data: string
+    r: string
+    s: string
+    v: number
+    creates: any
+    chainId: number
+  }
+}
+
+export default function Transaction({ tx }: TransactionProps) {
+  return (
+    <Container>
+      <Search />
+      <Heading as="h1" size="xl">
+        Transaction
+      </Heading>
+
+      <KeyValueProperty title="Hash:" value={tx.hash} />
+      <Link href={`/block/${tx.blockNumber}`}>
+        <a>
+          <KeyValueProperty
+            title="Block:"
+            value={
+              <span>
+                {tx.blockNumber}
+                <Badge colorScheme="green" marginLeft={3}>
+                  {tx.confirmations} Block Confirmations
+                </Badge>
+              </span>
+            }
+          />
+        </a>
+      </Link>
+      <KeyValueProperty title="From:" value={tx.from} displayLink="address" />
+      <KeyValueProperty title="To:" value={tx.to} displayLink="address" />
+      <KeyValueProperty title="Value:" value={`${utils.formatEther(tx.value.hex)} Ether`} />
+      <KeyValueProperty
+        title="Gas Price:"
+        value={`${utils.formatEther(BigNumber.from(tx.gasPrice.hex).toString())} Ether (${utils.formatUnits(
+          BigNumber.from(tx.gasPrice.hex).toString(),
+          'gwei'
+        )} gwei)`}
+      />
+      <KeyValueProperty title="Gas Limit:" value={BigNumber.from(tx.gasLimit.hex).toString()} />
+      <KeyValueProperty title="Nonce:" value={tx.nonce} />
+    </Container>
+  )
+}
+
+export async function getServerSideProps({ params }) {
+  const { data: tx } = await axios.get(`http://localhost:3000/api/transaction/${params.id}`)
+  return {
+    props: { tx },
+  }
+}
