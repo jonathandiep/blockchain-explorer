@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import axios from 'axios'
+import { useState } from 'react'
+import { getDefaultProvider } from 'ethers'
 import { Box, Code, Container, Heading, Link as CLink } from '@chakra-ui/react'
 
 import Search from '../components/Search'
-
 export interface IBlock {
   hash: string
   parentHash: string
@@ -29,6 +30,13 @@ interface HomeProps {
 }
 
 export default function Home({ latestBlocks }: HomeProps) {
+  const [blocks, setBlocks] = useState(latestBlocks)
+  const provider = getDefaultProvider('ws://localhost:8545')
+  provider.on('block', async (_blockNumber) => {
+    const { data } = await axios.get('http://localhost:3000/api/get-latest-blocks')
+    setBlocks(data.latestBlocks)
+  })
+
   return (
     <Container>
       <Search />
@@ -37,7 +45,7 @@ export default function Home({ latestBlocks }: HomeProps) {
         Latest Blocks
       </Heading>
       <div>
-        {latestBlocks.map((block) => {
+        {blocks.map((block) => {
           return (
             <Box display="flex" key={block.number}>
               <div>
