@@ -29,11 +29,20 @@ async function submitSearch(value: string, network: string, router: NextRouter) 
 export default function Search({ network }) {
   const [searchInput, setSearchInput] = useState('')
   const router = useRouter()
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      submitSearch(searchInput, network, router)
+    }
+  }
 
   return (
     <>
       <FormControl id="search" display="flex" marginTop={5}>
-        <Input placeholder="Search by Address / Txn Hash / Block" onChange={(e) => setSearchInput(e.target.value)} />
+        <Input
+          placeholder="Search by Address / Txn Hash / Block"
+          onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
         <Button colorScheme="blue" ml={2} onClick={() => submitSearch(searchInput, network, router)}>
           Submit
         </Button>
