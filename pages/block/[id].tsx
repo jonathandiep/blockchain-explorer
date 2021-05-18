@@ -71,7 +71,7 @@ export default function Block({ block, network }: BlockProps) {
 
 export async function getServerSideProps({ params, query }) {
   const { data: block } = await axios.get(
-    `${process.env.HOST || process.env.VERCEL_URL}/api/block/${params.id}?network=${query.network}`
+    `${process.env.HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/block/${params.id}?network=${query.network}`
   )
   return {
     props: { block, network: query.network },
