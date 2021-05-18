@@ -85,8 +85,12 @@ export async function getServerSideProps({ query }) {
 }
 
 async function getLatestBlocks(network: string) {
-  const { data } = await axios.get(
-    `${process.env.HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/get-latest-blocks?network=${network}`
-  )
-  return data.latestBlocks
+  try {
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/get-latest-blocks?network=${network}`
+    )
+    return data.latestBlocks
+  } catch (err) {
+    console.error(err)
+  }
 }

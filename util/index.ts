@@ -1,4 +1,4 @@
-export function getInfuraUrl(network: string, protocol: 'http' | 'ws'): string {
+export function getNetworkUrl(network: string, protocol: 'http' | 'ws' = 'http'): string {
   if (network === 'localhost') {
     return `${protocol}://localhost:8545`
   }
