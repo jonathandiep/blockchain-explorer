@@ -84,7 +84,7 @@ export default function Transaction({ tx, network }: TransactionProps) {
 
 export async function getServerSideProps({ params, query }) {
   const { data: tx } = await axios.get(
-    `${process.env.HOST || process.env.VERCEL_URL}/api/transaction/${params.id}?network=${query.network}`
+    `${process.env.HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/transaction/${params.id}?network=${query.network}`
   )
   return {
     props: { tx, network: query.network },
