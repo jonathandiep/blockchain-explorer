@@ -46,9 +46,24 @@ export default function Home({ latestBlocks, network: network }: HomeProps) {
       <NetworkSelection network={network} />
       <Search network={network} />
 
-      <Heading as="h2" size="lg">
-        Latest Blocks
-      </Heading>
+      {network !== 'localhost' || process.env.NEXT_PUBLIC_HOST.includes('localhost') ? (
+        <Heading as="h2" size="lg">
+          Latest Blocks
+        </Heading>
+      ) : (
+        <Box>
+          <Heading as="h2" size="md">
+            Localhost not available
+          </Heading>
+          <p>Please clone and run locally in the meantime 😇</p>
+          <p>
+            <a href="https://github.com/jonathandiep/blockchain-explorer">
+              https://github.com/jonathandiep/blockchain-explorer
+            </a>
+          </p>
+        </Box>
+      )}
+
       <div>
         {blocks?.map((block) => {
           return (
@@ -86,9 +101,7 @@ export async function getServerSideProps({ query }) {
 
 async function getLatestBlocks(network: string) {
   try {
-    const { data } = await axios.get(
-      `${process.env.NEXT_PUBLIC_HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/get-latest-blocks?network=${network}`
-    )
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/get-latest-blocks?network=${network}`)
     return data.latestBlocks
   } catch (err) {
     console.error(err)
