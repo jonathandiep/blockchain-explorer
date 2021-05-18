@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter, NextRouter } from 'next/router'
 import { Button, Divider, FormControl, Input } from '@chakra-ui/react'
 
-import { getInfuraUrl } from '../util'
+import { getNetworkUrl } from '../util'
 
 async function submitSearch(value: string, network: string, router: NextRouter) {
   if (utils.isAddress(value)) {
@@ -11,7 +11,7 @@ async function submitSearch(value: string, network: string, router: NextRouter) 
     return
   }
 
-  const provider = getDefaultProvider(getInfuraUrl(network, 'http'))
+  const provider = getDefaultProvider(getNetworkUrl(network, 'http'))
 
   const tx = await provider.getTransaction(value)
   if (tx?.hash) {
