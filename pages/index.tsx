@@ -85,6 +85,8 @@ export async function getServerSideProps({ query }) {
 }
 
 async function getLatestBlocks(network: string) {
-  const { data } = await axios.get(`${process.env.HOST}/api/get-latest-blocks?network=${network}`)
+  const { data } = await axios.get(
+    `${process.env.HOST || process.env.VERCEL_URL}/api/get-latest-blocks?network=${network}`
+  )
   return data.latestBlocks
 }
