@@ -70,7 +70,7 @@ export default function Block({ block, network }: BlockProps) {
 }
 
 export async function getServerSideProps({ params, query }) {
-  const { data: block } = await axios.get(`http://localhost:3000/api/block/${params.id}?network=${query.network}`)
+  const { data: block } = await axios.get(`${process.env.HOST}/api/block/${params.id}?network=${query.network}`)
   return {
     props: { block, network: query.network },
   }

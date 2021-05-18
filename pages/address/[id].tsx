@@ -32,7 +32,7 @@ export default function Address({ address, balance, transactionCount, network }:
 }
 
 export async function getServerSideProps({ params, query }) {
-  const { data } = await axios.get(`http://localhost:3000/api/address/${params.id}?network=${query.network}`)
+  const { data } = await axios.get(`${process.env.HOST}/api/address/${params.id}?network=${query.network}`)
   return {
     props: {
       network: query.network,

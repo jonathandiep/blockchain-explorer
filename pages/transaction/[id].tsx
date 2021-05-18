@@ -83,7 +83,7 @@ export default function Transaction({ tx, network }: TransactionProps) {
 }
 
 export async function getServerSideProps({ params, query }) {
-  const { data: tx } = await axios.get(`http://localhost:3000/api/transaction/${params.id}?network=${query.network}`)
+  const { data: tx } = await axios.get(`${process.env.HOST}/api/transaction/${params.id}?network=${query.network}`)
   return {
     props: { tx, network: query.network },
   }
