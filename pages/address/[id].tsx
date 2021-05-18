@@ -32,11 +32,7 @@ export default function Address({ address, balance, transactionCount, network }:
 }
 
 export async function getServerSideProps({ params, query }) {
-  const { data } = await axios.get(
-    `${process.env.NEXT_PUBLIC_HOST || process.env.NEXT_PUBLIC_VERCEL_URL}/api/address/${params.id}?network=${
-      query.network
-    }`
-  )
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/address/${params.id}?network=${query.network}`)
   return {
     props: {
       network: query.network,
