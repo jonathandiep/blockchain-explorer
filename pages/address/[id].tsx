@@ -3,18 +3,21 @@ import { utils } from 'ethers'
 import { Container, Heading } from '@chakra-ui/react'
 
 import KeyValueProperty from '../../components/KeyValueProperty'
+import NetworkSelection from '../../components/NetworkSelection'
 import Search from '../../components/Search'
 
 interface AddressProps {
+  network: string
   address: string
   balance: string
   transactionCount: number
 }
 
-export default function Address({ address, balance, transactionCount }: AddressProps) {
+export default function Address({ address, balance, transactionCount, network }: AddressProps) {
   return (
     <Container>
-      <Search />
+      <NetworkSelection network={network} />
+      <Search network={network} />
       <Heading as="h1" size="xl">
         Address
       </Heading>
@@ -28,10 +31,11 @@ export default function Address({ address, balance, transactionCount }: AddressP
   )
 }
 
-export async function getServerSideProps({ params }) {
-  const { data } = await axios.get(`http://localhost:3000/api/address/${params.id}`)
+export async function getServerSideProps({ params, query }) {
+  const { data } = await axios.get(`http://localhost:3000/api/address/${params.id}?network=${query.network}`)
   return {
     props: {
+      network: query.network,
       address: params.id,
       balance: data.balance,
       transactionCount: data.transactionCount,

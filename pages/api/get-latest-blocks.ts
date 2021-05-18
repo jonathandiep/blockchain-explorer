@@ -1,8 +1,10 @@
 import { ethers } from 'ethers'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const provider = ethers.getDefaultProvider(req.body.network || 'http://localhost:8545')
+import { getInfuraUrl } from '../../util'
+
+export default async ({ query }: NextApiRequest, res: NextApiResponse) => {
+  const provider = ethers.getDefaultProvider(getInfuraUrl(query.network as string, 'http'))
   let blockNumberPointer = await provider.getBlockNumber()
   let blockNumbers = []
   while (blockNumberPointer >= 0 && blockNumbers.length < 5) {

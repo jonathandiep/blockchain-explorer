@@ -1,10 +1,12 @@
 import { ethers } from 'ethers'
 import { NextApiRequest, NextApiResponse } from 'next'
 
+import { getInfuraUrl } from '../../../util'
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id } = req.query
-    const provider = ethers.getDefaultProvider(req.body.network || 'http://localhost:8545')
+    const { id, network } = req.query
+    const provider = ethers.getDefaultProvider(getInfuraUrl(network as string, 'http'))
     // hacky solution, but it works lol
     const blockId = /\d+/.test(id as string) && id.indexOf('0x') !== 0 ? parseInt(id as string) : (id as string)
     // TODO: Use getBlockWithTransactions
