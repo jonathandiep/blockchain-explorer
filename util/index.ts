@@ -3,6 +3,5 @@ export function getNetworkUrl(network: string, protocol: 'http' | 'ws' = 'http')
     return `${protocol}://localhost:8545`
   }
 
-  // FIXME: Use dotenv and import id
-  return `${protocol}s://${network}.infura.io/v3/${process.env.INFURA_PROJECT_ID}`
+  return `${protocol}s://${network}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
 }
