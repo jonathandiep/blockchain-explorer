@@ -35,7 +35,7 @@ export default function Home({ latestBlocks, network: network }: HomeProps) {
 
   useEffect(() => {
     async function getBlocks() {
-      const data = await getLatestBlocks(network)
+      const data = await getLatestBlocks(network, true)
       setBlocks(data)
     }
     getBlocks()
