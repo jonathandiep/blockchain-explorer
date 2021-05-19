@@ -46,7 +46,10 @@ export default function Home({ latestBlocks, network: network }: HomeProps) {
       <NetworkSelection network={network} />
       <Search network={network} />
 
-      {network !== 'localhost' || process.env.NEXT_PUBLIC_HOST.includes('localhost') ? (
+      <Heading as="h2" size="lg">
+        Latest Blocks
+      </Heading>
+      {/* {network !== 'localhost' || process.env.NEXT_PUBLIC_HOST.includes('localhost') ? (
         <Heading as="h2" size="lg">
           Latest Blocks
         </Heading>
@@ -62,7 +65,7 @@ export default function Home({ latestBlocks, network: network }: HomeProps) {
             </a>
           </p>
         </Box>
-      )}
+      )} */}
 
       <div>
         {blocks?.map((block) => {
@@ -93,15 +96,22 @@ export default function Home({ latestBlocks, network: network }: HomeProps) {
 
 export async function getServerSideProps({ query }) {
   const network = query?.network || 'mainnet'
+
+  if (query?.network === 'localhost') {
+    return { props: { latestBlocks: [], network } }
+  }
+
   const latestBlocks = await getLatestBlocks(network)
   return {
     props: { latestBlocks, network },
   }
 }
 
-async function getLatestBlocks(network: string) {
+async function getLatestBlocks(network: string, localhost: boolean = false) {
   try {
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_HOST}/api/get-latest-blocks?network=${network}`)
+    const { data } = await axios.get(
+      `${localhost ? 'http://localhost:8545' : process.env.NEXT_PUBLIC_HOST}/api/get-latest-blocks?network=${network}`
+    )
     return data.latestBlocks
   } catch (err) {
     console.error(err)
